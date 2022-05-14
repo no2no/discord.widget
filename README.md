@@ -1,2 +1,0 @@
-# symmetrical-waddle
-SySy
