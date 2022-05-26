@@ -1,0 +1,3 @@
+User-agent: *
+Disallow: /ninjin.html
+Disallow: /discord.widget/ninjin.html
