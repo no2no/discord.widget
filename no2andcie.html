@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>No2&Cie - Widget Discord</title>
+    <meta charset="utf-8">
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="googlebot" content="noindex, nofollow" />
+    <link rel="stylesheet" href="assets/css/no2.css">
+    <style>
+        :root {
+            --background: #151c2200 !important;
+            --color: #fff !important;
+            --background2: #a55eea !important;
+            --background3: #151c2200 !important;
+        }
+        
+         .discord-list-label:before {
+            content: "Communautée No2&Cie" !important;
+            font-size: 12px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div id="discordWidget">
+        <section v-if="errored">
+            <div class="card discord">
+                <div class="discord-widget">
+                    <div class="discord-header">
+                        <div class="discord-logo"></div>
+                        <div id="members-count">
+                            000 <span class='member-label'> membres connectés</span>
+                        </div>
+                    </div>
+                    <div class="discord-body">
+                        <div class="discord-list">
+                            <div class="discord-list-status">
+                                <div class="discord-list-label"></div>
+                            </div>
+                            <table id="members-list"></table>
+                        </div>
+                        <a title="Rejoindre le Discord" rel="noopener nofollow">
+                            <button class="discord-cta-load"></button>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section v-else>
+            <div v-if="loading">
+                <div class="card discord">
+                    <div class="discord-widget">
+                        <div class="discord-header">
+                            <div class="discord-logo"></div>
+                            <div id="members-count">
+                                000 <span class='member-label'> membres connectés</span>
+                            </div>
+                        </div>
+                        <div class="discord-body">
+                            <div class="discord-list">
+                                <div class="discord-list-status">
+                                    <div class="discord-list-label"></div>
+                                </div>
+                                <table id="members-list"></table>
+                            </div>
+                            <a title="Rejoindre le Discord" rel="noopener nofollow">
+                                <button class="discord-cta-load"></button>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card discord">
+                <div class="discord-widget">
+                    <div class="discord-header">
+                        <div class="discord-logo"></div>
+                        <div id="members-count">
+                            {{ discord.members.length }} <span class='member-label'> membres connectés</span>
+                        </div>
+                    </div>
+                    <div class="discord-body">
+                        <div class="discord-list">
+                            <div class="discord-list-status">
+                                <div class="discord-list-label"></div>
+                            </div>
+                            <table id="members-list" v-for="users in discord.members" style="display: block;">
+                                <tbody>
+                                    <tr>
+                                        <td class="member-avatars">
+                                            <img :src="users.avatar_url" draggable="false" alt="discord avatar logo">
+                                        </td>
+                                        <td class="member-name">
+                                            <label>{{ users.username }}</label>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <a :href="discord.instant_invite" title="Rejoindre le Discord" rel="noopener nofollow">
+                            <button class="discord-cta" style="cursor: pointer;"></button>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    <script src="assets/js/vue-2.5.17.min.js"></script>
+    <script src="assets/js/axios.min.js"></script>
+    <script>
+        new Vue({
+            el: '#discordWidget',
+            data() {
+                return {
+                    discord: null,
+                    loading: true,
+                    errored: false
+                };
+            },
+            mounted() {
+                axios.get('https://ptb.discord.com/api/guilds/975978017807564822/widget.json')
+                .then(response => (this.discord = response.data))
+                .catch(error => {
+                console.log(error);
+                this.errored = true;
+                })
+                .finally(() => this.loading = false);
+            }
+        });
+    </script>
+</body> 
+</html>
